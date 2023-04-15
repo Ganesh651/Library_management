@@ -1,6 +1,4 @@
 let libraryBgContainer = document.getElementById("libraryBgContainer");
-// let libraryBgContainer = document.createElement("div");
-// document.body.appendChild(libraryBgContainer);
 
 let topSectionContainer = document.createElement("div");
 topSectionContainer.classList.add("p-5", "text-center");
@@ -19,16 +17,20 @@ userInput.id = "searchInput";
 userInput.placeholder = "Type book title";
 topSectionContainer.appendChild(userInput);
 
-
 let displayContainer = document.createElement("div");
 displayContainer.classList.add("mt-3","text-center");
 libraryBgContainer.appendChild(displayContainer);
 
+let loadEl = document.createElement("p");
+loadEl.textContent = "Loading...";
+loadEl.style.fontSize = "25px";
+loadEl.style.fontWeight = "bold";
+loadEl.classList.add("d-none", "text-center");
+libraryBgContainer.appendChild(loadEl);
 
 function createAndAppend(item){
     let {imageLink, title} = item;
 
-    // let resultsHeading = document.createElement("h1");
     let finalContainer = document.createElement("div");
     finalContainer.classList.add("col-12");
 
@@ -44,6 +46,7 @@ function createAndAppend(item){
 }
 
 function displayResults(search_results) {
+    loadEl.classList.add("d-none");
     for (let item of search_results){
         createAndAppend(item)
     }
@@ -61,7 +64,7 @@ function searchUserInput(){
     .then(function(jsonData){
         console.log(jsonData)
         let {search_results} = jsonData;
-        if (search_results.length === 0){
+                if (search_results.length === 0){
             displayContainer.textContent = ""
             let para1 = document.createElement("p");
             para1.textContent = "No Results found";
@@ -91,6 +94,7 @@ function searchUserInput(){
 
 userInput.addEventListener("keydown", function(event){
     if (event.key === "Enter"){
+        loadEl.classList.remove("d-none");
         searchUserInput();
         userInput.value = "";
     }
